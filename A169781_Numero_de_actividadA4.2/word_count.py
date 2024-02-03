@@ -26,7 +26,8 @@ derivas las toma como diferentes.
         sys.exit(0)
     else:
         _file = sys.argv[1]
-        palabras = re.findall(r'\w+', open(_file, encoding="utf-8").read().lower())
+        with open(_file, 'r', encoding="utf-8") as palabras:
+            palabras = re.findall(r'\w+', palabras.read().lower())
         elementos = 0
         with open('WordCountResults.txt', 'w', encoding="utf-8") as f:
             for palabra, ocurrencias in Counter(palabras).most_common():

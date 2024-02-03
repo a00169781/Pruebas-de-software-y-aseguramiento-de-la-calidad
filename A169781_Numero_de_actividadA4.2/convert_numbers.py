@@ -5,6 +5,11 @@ import fileinput
 import sys
 from time import time
 
+def is_int(s):
+    """Función que revisa si el string es entero incluyendo negativos"""
+    if s[0] in ('-', '+'):
+        return s[1:].isdigit()
+    return s.isdigit()
 
 def main():
     """Rutina principal"""
@@ -24,11 +29,16 @@ def main():
     else:
         with open('ConvertionResults.txt', 'w', encoding="utf-8") as f:
             for line in fileinput.input():
-                if line.strip().isnumeric():
-                    _int = int(line.strip())
-                    _bin = f"{_int:08b}"
-                    _hex = str(hex(_int))
-                    _str = str(_int) + ' ' + _bin + ' ' + _hex[2:]
+                _num = line.strip()
+                if is_int(_num):
+                    _int = int(_num)
+                    if _int < 0:
+                        _bin = str(bin(_int & 0b1111111111111111111111111111111111111111))
+                        _hex = str(hex(_int & 0b1111111111111111111111111111111111111111))
+                    else:
+                        _bin = str(bin(_int))
+                        _hex = str(hex(_int))
+                    _str = str(_int) + ' ' + _bin[2:] + ' ' + _hex[2:]
                     print(_str)
                     f.write(_str)
                 else:
