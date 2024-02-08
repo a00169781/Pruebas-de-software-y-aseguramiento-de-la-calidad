@@ -31,42 +31,39 @@ def main():
         prices = {}
         sales = {}
         total_sales = 0
+        # We read the first file, the json prices file
         with open(_prices, 'r', encoding="utf-8") as _prices_file:
             _prices_json = json.load(_prices_file)
+        # We read the second file, the json seles file
         with open(_sales, 'r', encoding="utf-8") as _sales_file:
             _sales_json = json.load(_sales_file)
-
+        # We inspect the prices json and pickup the members that have the relevant
+        # information
         for element in _prices_json:
-            title = element['title']
-            price = element['price']
-            if title in prices:
-                print('Product: ' + title + ' was already defined ignoring duplicates')
+            if element['title'] in prices:
+                print('Product: ' + element['title'] + ' was already defined ignoring duplicates')
             else:
-                prices[title] = price
-
+                prices[element['title']] = element['price']
+        # We inspect the sales json and pickup the members that have the relevant
+        # information
         for element in _sales_json:
-            product = element['Product']
-            quantity = element['Quantity']
-            if product not in sales:
-                sales[product] = 0
-            sales[product] += float(quantity)
-
+            if element['Product'] not in sales:
+                sales[element['Product']] = 0
+            sales[element['Product']] += float(element['Quantity'])
+        # We walk all the sales and multiply the number of sold items by it price
         for product, quantity in sales.items():
             if product in prices:
                 total_sales += prices[product] * quantity
             else:
                 print('Price for ' + product + ' is not defined... SKIPING')
 
-
-        t2 = time() - t1
-        _tiempo = 'Tiempo de ejecución: ' + str(t2) + 's'
-        _total = 'Total: ' + f"{total_sales:0.2f}"
-        print(_tiempo)
-        print(_total)
-
+        # We print in STDOUT the information
+        print('Tiempo de ejecución: ' + str(time() - t1) + 's')
+        print('Total: ' + f"{total_sales:0.2f}")
+        # We write the same information tp
         with open('SalesResults.txt', 'w', encoding="utf-8") as f:
-            f.write(_tiempo + "\n")
-            f.write(_total)
+            f.write('Tiempo de ejecución: ' + str(time() - t1) + 's' + "\n")
+            f.write('Total: ' + f"{total_sales:0.2f}" + "\n")
 
 if __name__ == "__main__":
     main()
