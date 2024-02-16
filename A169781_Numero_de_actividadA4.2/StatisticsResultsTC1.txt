@@ -1,0 +1,7 @@
+Número de elementos: 400
+Media: 242.32
+Mediana: 239.5
+Moda: [170.0, 393.0]
+Desviación Estandar: 145.44002062361477
+Varianza: 21152.799598997488
+Tiempo de ejecución: 0.0023925304412841797s

@@ -1,0 +1,11 @@
+Elemento no es válido y será ignorado: ABA
+Elemento no es válido y será ignorado: 23,45
+Elemento no es válido y será ignorado: 11;54
+Elemento no es válido y será ignorado: ll
+Número de elementos: 307
+Media: 241.49511400651465
+Mediana: 241.0
+Moda: [11.0, 19.0, 46.0, 56.0, 64.0]
+Desviación Estandar: 145.7023416478609
+Varianza: 21229.17236166998
+Tiempo de ejecución: 0.001672506332397461s

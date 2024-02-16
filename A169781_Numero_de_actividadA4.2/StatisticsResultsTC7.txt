@@ -1,0 +1,9 @@
+Elemento no es válido y será ignorado: ABBA
+Elemento no es válido y será ignorado: ERROR
+Número de elementos: 12767
+Media: 2.474673954997149e+20
+Mediana: 2.4664097307429e+20
+Moda: [9596336322581500.0, 2.88418752936725e+16, 9.10526151920998e+16, 1.08852321352715e+17, 1.20138430722061e+17]
+Desviación Estandar: 1.4461131060123312e+20
+Varianza: 2.091243115380632e+40
+Tiempo de ejecución: 4.718262434005737s
