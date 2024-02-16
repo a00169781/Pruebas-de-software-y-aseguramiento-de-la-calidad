@@ -1,0 +1,4 @@
+Price for Elotes is not defined... SKIPING
+Price for Frijoles is not defined... SKIPING
+Tiempo de ejecución: 0.0001850128173828125s
+Total: 165235.37
