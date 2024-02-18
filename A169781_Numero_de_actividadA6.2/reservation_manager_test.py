@@ -1,7 +1,8 @@
 """ Script de pruebas para validar las clases Hotel, Reservation y Customer"""
 import unittest
 import os
-from reservation_manager import Hotel, Customer, Reservation, carga_json
+from reservation_manager import carga_json, guarda_json
+from reservation_manager import Hotel, Customer, Reservation
 
 
 class TestHelperFunctions(unittest.TestCase):
@@ -26,7 +27,13 @@ class TestHelperFunctions(unittest.TestCase):
         """ Prueba Negativa, esta valida que solo podamos cargar los
         archivos de tipo hotel, customer o reservation si intentamos
         cargar otro tipo de archivo regresa una excepción """
-        self.assertRaises(TypeError, carga_json, 'hostel')
+        self.assertRaises(ValueError, carga_json, 'hostel')
+
+    def test_guarda_json_exception(self):
+        """ Prueba Negativa, esta valida que solo podamos guardar los
+        archivos de tipo hotel, customer o reservation si intentamos
+        cargar otro tipo de archivo regresa una excepción """
+        self.assertRaises(ValueError, guarda_json, 'hostel', {})
 
 
 class TestHotel(unittest.TestCase):
@@ -62,6 +69,12 @@ class TestHotel(unittest.TestCase):
         hotel_json = carga_json('hotel')
         self.assertFalse(name in hotel_json)
 
+    def test_delete_hotel_exeption(self):
+        """ Prueba Negativa, valida que no se puedan borrar
+        hoteles que no existen """
+        name = "Mi hotel que no existe"
+        self.assertRaises(ValueError, self.hotel.delete_hotel, name)
+
     def test_modify_hotel(self):
         """ Test para validar el método modify_info de la clase Hotel """
         old_name = self.hotel.name
@@ -73,10 +86,19 @@ class TestHotel(unittest.TestCase):
         self.hotel.reserve()
         self.assertTrue(self.hotel.reservado)
 
+    def test_hotel_reserve_exeption(self):
+        """ Prueba Negativa Test que no se puede reservar un hotel lleno """
+        self.assertRaises(ValueError, self.hotel.reserve, )
+
     def test_hotel_cancel_reservation(self):
         """ Test para validar el método cancel_reservation """
+        self.hotel.reserve()
         self.hotel.cancel_reservation()
         self.assertFalse(self.hotel.reservado)
+
+    def test_hotel_cancel_reservation_exception(self):
+        """ Prueba Negativa Test para validar el método cancel_reservation """
+        self.assertRaises(ValueError, self.hotel.cancel_reservation, )
 
 
 class TestCustomer(unittest.TestCase):
@@ -96,6 +118,11 @@ class TestCustomer(unittest.TestCase):
         """ Test para validar la creación de un cliente """
         self.customer = Customer('Joe Jane Doe')
         self.assertEqual('Joe Jane Doe', self.customer.name)
+
+    def test_detlete_customer_exeption(self):
+        """ Test para validar la remoción de un cliente """
+        name = self.customer.name + ' No existe'
+        self.assertRaises(ValueError, self.customer.delete_customer, name)
 
     def test_detlete_customer(self):
         """ Test para validar la remoción de un cliente """

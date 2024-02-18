@@ -10,7 +10,7 @@ SUPORTED_TYPES = ['hotel', 'reservation', 'customer']
 def carga_json(tipo):
     """Función para cargar archivos de json"""
     if tipo not in SUPORTED_TYPES:
-        raise TypeError("""Solo se pueden cargar archivos
+        raise ValueError("""Solo se pueden cargar archivos
          para 'hotel', 'reservation', 'customer'""")
     file_name = tipo + ".json"
     if not os.path.exists(file_name):
@@ -28,7 +28,7 @@ def carga_json(tipo):
 def guarda_json(tipo, json_blob):
     """Función para salvar archivos de json"""
     if tipo not in SUPORTED_TYPES:
-        raise TypeError("""Solo se pueden cargar
+        raise ValueError("""Solo se pueden cargar
          archivos para " + SUPORTED_TYPES""")
     with open(tipo + ".json", 'w', encoding="utf-8") as _json_file:
         json.dump(json_blob, _json_file)
@@ -70,10 +70,9 @@ class Hotel:
         """ Borra hotel """
         hotel_blob = carga_json('hotel')
         if name not in hotel_blob:
-            print('Hotel: ' + name + ' not found, no need for deletion.')
-        else:
-            del hotel_blob[name]
-            guarda_json('hotel', hotel_blob)
+            raise ValueError('Hotel: ' + name + ' not found')
+        del hotel_blob[name]
+        guarda_json('hotel', hotel_blob)
 
     def desplay_info(self):
         """ Imprime la información del Hotel """
@@ -86,11 +85,15 @@ class Hotel:
 
     def reserve(self):
         """ Reserva el único cuarto que tiene el hotel """
+        if self.reservado:
+            raise ValueError('Cannot reserve, hotel already fully booked')
         self.reservado = True
         self.save_to_disk()
 
     def cancel_reservation(self):
         """ Cancela la reservación """
+        if not self.reservado:
+            raise ValueError('No reservation for this hotel, cannot cancel')
         self.reservado = False
         self.save_to_disk()
 
@@ -123,10 +126,9 @@ class Customer:
         """ Borra un Customer """
         customer_blob = carga_json('customer')
         if name not in customer_blob:
-            print('Hotel: ' + name + ' not found, no need for deletion.')
-        else:
-            customer_blob.remove(name)
-            guarda_json('customer', customer_blob)
+            raise ValueError('Hotel: ' + name + ' not found')
+        customer_blob.remove(name)
+        guarda_json('customer', customer_blob)
 
     def desplay_info(self):
         """ Imprime la información del Customer """
@@ -147,13 +149,12 @@ class Reservation:
         """Metodo para instansear un objeto Customer, por simplicidad
         el Customer solo tiene un nombre como dato"""
         if hotel.reservado:
-            print('Hotel: ' + hotel.name +
-                  ' no tiene disponibilidad, imposible reservar')
-        else:
-            hotel.reserve()
-            self.customer = customer.name
-            self.hotel = hotel.name
-            self.save_to_disk()
+            raise ValueError('Hotel: ' + hotel.name +
+                             ' no tiene disponibilidad')
+        hotel.reserve()
+        self.customer = customer.name
+        self.hotel = hotel.name
+        self.save_to_disk()
 
     def save_to_disk(self):
         """ Guarda datos a disco """
@@ -165,13 +166,12 @@ class Reservation:
         """ Cancela una reservacion """
         reservation_blob = carga_json('reservation')
         if self.hotel not in reservation_blob:
-            print('Hotel: ' + self.hotel +
+            raise ValueError('Hotel: ' + self.hotel +
                   ' not found in reservation records, no need to cancel.')
-        else:
-            hotel = Hotel(self.hotel)
-            hotel.cancel_reservation()
-            del reservation_blob[self.hotel]
-            guarda_json('reservation', reservation_blob)
+        hotel = Hotel(self.hotel)
+        hotel.cancel_reservation()
+        del reservation_blob[self.hotel]
+        guarda_json('reservation', reservation_blob)
 
 
 def main():
